@@ -6,42 +6,53 @@
 #include <string.h>
 #include <ctype.h>
 
-int verificaID(Fila *N, Fila *E, int id, Fila *A)
+
+
+
+void gerarmatricula(char *dest)
 {
-    Nos *aux = N->ini;
-    while (aux != NULL)
-    {
-        if (aux->dados.id == id)
-        {
-            return 1;
-        }
-        aux = aux->prox;
-    }
-
-    aux = E->ini;
-    while (aux != NULL)
-    {
-        if (aux->dados.id == id)
-        {
-            return 1;
-        }
-        aux = aux->prox;
-    }
-    aux = A->ini;
-    while (aux != NULL)
-    {
-        if (aux->dados.id == id)
-        {
-            return 1;
-        }
-        aux = aux->prox;
-    }
-
-    return 0;
+    int aux1 = rand() % 900 + 100;
+    sprintf(dest, "v%d", aux1);
 }
 
 
+void data(vendas *aux) {
+    printf("Digite a data da venda:\n");
+    do {
+        printf("Dia: ");
+        fflush(stdin);
+        scanf("%d", &aux->data.dia);
 
+        if(aux->data.dia < 1 || aux->data.dia > 31) {
+            printf("Valor incorreto! O dia deve ser entre 1 e 31.\n");
+        }
+
+    } while (aux->data.dia < 1 || aux->data.dia > 31);
+    do {
+        printf("Mes: ");
+        fflush(stdin);
+        scanf("%d", &aux->data.mes);
+
+        if(aux->data.mes < 1 || aux->data.mes > 12) {
+            printf("Valor incorreto! O mes deve ser entre 1 e 12.\n");
+        }
+
+    } while (aux->data.mes < 1 || aux->data.mes > 12);
+    do {
+        printf("Ano: ");
+        fflush(stdin);
+        scanf("%d", &aux->data.ano);
+
+        if(aux->data.ano < 2020 || aux->data.ano > 2030) {
+            printf("Valor incorreto! O ano deve ser entre 2020 e 2030.\n");
+        }
+
+    } while (aux->data.ano < 2020 || aux->data.ano > 2030);
+
+
+    printf("Data valida: %02d/%02d/%04d\n",
+           aux->data.dia, aux->data.mes, aux->data.ano);
+}
 
 
 
@@ -50,29 +61,18 @@ int main()
 {
     setlocale(LC_ALL, "Portuguese");
     int opcao, id;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    Arv *vnd = Criar_Arvore();
+    vendas aux;
+    char auxVend[50];
     srand(time(NULL));
-    printf("\n\n\n\n\t\t\t\t=============================================\n");
-    printf("\t\t\t\t        BEM-VINDO(A) À LOJA   \n");
-    printf("\t\t\t\t                        JUJU VENDAS                   \n");
-    printf("\t\t\t\t=============================================\n");
+
     printf("\n");
-    printf(" \t\t\t\tCuidando do seu pet com amor e dedicação!\n\n\n\n");
+    printf("\t\t\t\t=============================================\n");
+    printf("\t\t\t\t      BEM-VINDO(A) AO ESTOQUE DA LOJA        \n");
+    printf("\t\t\t\t---------------------------------------------\n");
+    printf("\n\t\t\t\t\tRegistro e busca de vendas !\n\n");
+    printf("\t\t\t\t=============================================\n");
+
     printf("\n");
 
     system("pause");
@@ -102,134 +102,152 @@ int main()
 
             fflush(stdin);
             system("cls");
-            Arv vnd = Criar_Arvore();
-            id = rand() % 9000 + 1000;
-            ;
-            printf("=====================================\n");
-            printf("         Cadastro do Animal           \n");
-            printf("=====================================\n");
 
-            while (verificaID(Arv,id))
+            id = rand() % 9000 + 1000;
+
+            printf("\t\t\t\t\t=====================================\n");
+            printf("\t\t\t\t\t         Registrar Venda:           \n");
+            printf("\t\t\t\t\t=====================================\n");
+
+            while (verifica_existencia(vnd->raiz,id))
             {
                 id = rand() % 9000 + 1000;
-                ;
+
             }
             printf("ID gerado automaticamente: %d\n", id);
-            vnd.id = id;
-            printf("Digite o nome do animal: ");
-            gets(cad.nome);
+            aux.id = id;
 
-            for (int i = 0; i < strlen(cad.nome); i++)
+            printf("Digite o nome do Cliente: ");
+            gets(aux.cliente);
+            strlwr(aux.cliente);
+
+            char a, b[4];
+
+
+            do
             {
-                cad.nome[i]=tolower(cad.nome[i]);
+                printf("O vendedor já foi cadastrado:\nDigite s ou n: ");
+                fflush(stdin);
+                scanf(" %c", &a);
+                a = tolower(a);
+
             }
-            printf("Digite a especie do animal: ");
-            gets(cad.especie);
-            printf("Digite a data de nascimento:\n");
-            printf("Dia: ");
-            scanf("%d", &cad.nas.dia);
-            printf("Mes: ");
-            scanf("%d", &cad.nas.mes);
-            printf("Ano: ");
-            scanf("%d", &cad.nas.ano);
-            cad.idade=idade(cad.nas);
-            printf("Idade:%d\n",cad.idade);
+            while (a != 's' && a != 'n');
 
-            printf("Digite a prioridade (0 - Normal | 1 - Urgente): ");
-            scanf("%d", &cad.prioridade);
-            if (cad.prioridade)
+            if(a == 's')
             {
-                InsereFila(emer, cad);
-                printf("Animal cadastrado com sucesso na emergencia!!\n\n");
+                printf("Digite a matricula: \n");
+                fflush(stdin);
+                gets(b);
+                strcpy(aux.mat,b);
+                retorna_nome(vnd->raiz,&aux);
+                printf("Nome do vendedor:%s\n",aux.vendedor);
+
             }
             else
             {
-                InsereFila(normal, cad);
-                printf("Animal cadastrado com sucesso no atendimento normal!!\n\n");
+
+                printf("Digite o nome do vendedor: ");
+                fflush(stdin);
+                gets(aux.vendedor);
+                strlwr(aux.vendedor);
+                gerarmatricula(aux.mat);
+                printf("Matricula do vendedor:%s\n",aux.mat);
             }
+
+            data(&aux);
+
+            printf("Digte o valor da venda:");
+            scanf("%f",&aux.valor);
+
+            insere(vnd,aux);
             system("pause");
             break;
 
         case 2:
-
             fflush(stdin);
             system("cls");
-            printf("\nAtendimento:\n\n");
+            printf("\t\t\t\t\t=====================================\n");
+            printf("\t\t\t\t\t         Listar todas as vendas:           \n");
+            printf("\t\t\t\t\t=====================================\n");
 
-            if (VaziaFila(emer) && VaziaFila(normal))
-            {
-                printf("\t\tSem Pacientes!!\n");
-            }
-            else
-            {
-                if (!VaziaFila(emer))
-                {
-                    printf("\t Animal com prioridade atendido:\n");
-                    aux = RetiraFila(emer);
-                    InsereFila(atendidos, aux);
-                    printf("%-5d | %-15s | %-10s | %-5d | %02d/%02d/%04d | %s\n",
-                           aux.id, aux.nome, aux.especie, aux.idade,
-                           aux.nas.dia, aux.nas.mes, aux.nas.ano,
-                           aux.prioridade == 1 ? "Urgente" : "Normal");
-                }
-                else
-                {
-                    printf("\t Animal sem prioridade atendido:\n");
-                    aux = RetiraFila(normal);
-                    InsereFila(atendidos, aux);
-                    printf("%-5d | %-15s | %-10s | %-5d | %02d/%02d/%04d | %s\n",
-                           aux.id, aux.nome, aux.especie, aux.idade,
-                           aux.nas.dia, aux.nas.mes, aux.nas.ano,
-                           aux.prioridade == 1 ? "Urgente" : "Normal");
-                }
-            }
+
+            printf("ID   | Vendedor        | Matricula  | Cliente          | Data         | Valor(R$)\n");
+            printf("-----+-----------------+------------+------------------+--------------+-----------\n");
+            imprimir_arvore(vnd->raiz);
 
             system("pause");
             break;
         case 3:
-            printf("\nBuscar um pet pelo nome e/ou ID.\n\n");
-            buscaPet(normal, emer, atendidos);
+            fflush(stdin);
+            system("cls");
+            printf("\t\t\t\t\t=====================================\n");
+            printf("\t\t\t\t\t   Buscar as vendas de um  Vendedor  \n");
+            printf("\t\t\t\t\t=====================================\n");
+            printf("Digite o nome ou a matricula do vendedor:");
+            gets(auxVend);
+            strlwr(auxVend);
+
+            printf("ID    | Cliente                                            | Data de Transação | Valor(R$)\n");
+            printf("------+----------------------------------------------------+-------------------+----------\n");
+
+            BuscarVendas(vnd->raiz,auxVend);
             system("pause");
             break;
 
         case 4:
-            imprimirFilas(normal, emer);
+
+            fflush(stdin);
+            system("cls");
+            printf("\t\t\t\t\t======================================\n");
+            printf("\t\t\t\t\t  vendas acima ou abaixo de um valor  \n");
+            printf("\t\t\t\t\t======================================\n");
+
+            float aux_vendas;
+            printf("Digite o valor base: ");
+            scanf("%f",&aux_vendas);
+            char e[7];
+            printf("Digite acima ou abaixo\n");
+            fflush(stdin);
+            gets(e);
+            strlwr(e);
+            if(!strcmp(e,"acima"))
+            {
+                acima(vnd->raiz,aux_vendas);
+            }
+            else
+            {
+                abaixo(vnd->raiz,aux_vendas);
+            }
+
+
+            system("pause");
             break;
 
         case 5:
             fflush(stdin);
             system("cls");
-            printf("\nPróximo pet a ser atendido:\n\n");
-            if (VaziaFila(emer) && VaziaFila(normal))
-            {
-                printf("Sem pacientes .\n");
-            }
-            else
-            {
-                if (!VaziaFila(emer))
-                {
-                    printf("%-5d | %-15s | %-10s | %-5d | Urgente\n",
-                           emer->ini->dados.id, emer->ini->dados.nome, emer->ini->dados.especie, emer->ini->dados.idade);
-                }
-                else
-                {
-                    printf("%-5d | %-15s | %-10s | %-5d | Normal\n",
-                           normal->ini->dados.id, normal->ini->dados.nome, normal->ini->dados.especie, normal->ini->dados.idade);
-                }
-            }
+            printf("\t\t\t\t\t=====================================\n");
+            printf("\t\t\t\t\t            estatísticas             \n");
+            printf("\t\t\t\t\t=====================================\n");
+
+            printf("Numero total de venda: %d",QntVendas(vnd->raiz));
+            printf("\nFaturamento: R$ %-.2f\n",faturamento(vnd->raiz));
 
             system("pause");
             break;
         case 6:
             fflush(stdin);
             system("cls");
-            printf("\nPets que já foram atendidos:\n\n");
-            if (VaziaFila(atendidos))
-                printf("Nenhum pet foi atendido ainda.\n");
-            else
-            {
-                imprimeFila(atendidos);
-            }
+            printf("\t\t\t\t\t=====================================\n");
+            printf("\t\t\t\t\t            Remover Venda            \n");
+            printf("\t\t\t\t\t=====================================\n");
+
+            int auxDOid;
+            printf("Digite o ID a ser removido:");
+            scanf("%d",&auxDOid);
+            remover(vnd,auxDOid);
+
 
             system("pause");
             break;
@@ -238,9 +256,9 @@ int main()
             fflush(stdin);
             system("cls");
             printf("\nSaindo do sistema. Até logo!\n");
-            liberaFila(normal);
-            liberaFila(emer);
-            liberaFila(atendidos);
+            liberaArv(vnd->raiz);
+            free(vnd);
+
             return 0;
 
         default:

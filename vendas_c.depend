@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1764349962 source:c:\users\fenat\onedrive\desktop\vendas_c\analise_de_vendas_c\main.c
+	<stdio.h>
+	<stdlib.h>
+	"ABB.h"
+	<locale.h>
+	<time.h>
+	<string.h>
+	<ctype.h>
+
+1764350419 c:\users\fenat\onedrive\desktop\vendas_c\analise_de_vendas_c\abb.h
+	<string.h>
+	<stdlib.h>
+
